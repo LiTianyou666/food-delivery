@@ -1,50 +1,54 @@
-import { getCart, removeFromCart, createOrder } from '../api/api.js';
-import { router } from '../utils/router.js';
+import { getCart, removeFromCart } from '../api/api.js';
+import { navigate } from '../utils/router.js';
+import { renderLoader } from '../components/Loader.js';
+import { renderError } from '../components/ErrorMessage.js';
+import { renderCartItem } from '../components/CartItem.js';
+import { formatPrice, escapeHtml } from '../utils/helpers.js';
+
+window.removeFromCart = async function(dishId) {
+    try {
+        await removeFromCart(dishId);
+        loadCartData();
+    } catch (err) {
+        alert(escapeHtml('Remove failed: ' + err.message));
+    }
+};
 
 export function Cart() {
-  return `
-    <div class="card">
-      <h2>My Cart</h2>
-      <div id="cart-list">Loading...</div>
-      <div id="total"></div>
-      <button id="checkout" style="display:none;">Checkout</button>
-    </div>
-  `;
+    setTimeout(loadCartData, 200);
+    return `
+        <div class="card">
+            <h2>Shopping Cart</h2>
+            <div id="cart-list">${renderLoader()}</div>
+            <div id="cart-total"></div>
+            <button id="checkout-btn">Proceed to Checkout</button>
+        </div>
+    `;
 }
 
-setTimeout(async () => {
-  const list = document.getElementById('cart-list');
-  const total = document.getElementById('total');
-  const btn = document.getElementById('checkout');
-  if (!list || !total || !btn) return;
-
-  try {
-    const data = await getCart();
-    if (data.items.length === 0) {
-      list.innerHTML = 'Cart is empty';
-      return;
+async function loadCartData() {
+    const listEl = document.getElementById('cart-list');
+    const totalEl = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (!listEl) return;
+    try {
+        const res = await getCart();
+        const items = Array.isArray(res) ? res : (res?.items || []);
+        if (items.length === 0) {
+            listEl.innerHTML = '<p>Your cart is empty</p>';
+            totalEl.innerHTML = '';
+            checkoutBtn.style.display = 'none';
+            return;
+        }
+        let totalPrice = 0;
+        listEl.innerHTML = items.map(item => {
+            totalPrice += item.totalPrice || item.price;
+            return renderCartItem(item);
+        }).join('');
+        totalEl.innerHTML = `<h3>Total: ${formatPrice(totalPrice)}</h3>`;
+        checkoutBtn.style.display = 'block';
+        checkoutBtn.onclick = () => navigate('/checkout');
+    } catch (err) {
+        listEl.innerHTML = renderError(err.message);
     }
-
-    list.innerHTML = data.items.map(i => `
-      <div>
-        <p>${i.dish.name} | ${i.count} x ${i.dish.price} ₽</p>
-        <button onclick="remove(${i.dish.id})">Remove</button>
-      </div>
-    `).join('');
-
-    total.innerHTML = `<h3>Total: ${data.price} ₽</h3>`;
-    btn.style.display = 'block';
-
-    btn.onclick = async () => {
-      await createOrder({ address: 'Default Address' });
-      router.navigate('/orders');
-    };
-  } catch (e) {
-    list.innerHTML = 'Failed to load cart';
-  }
-}, 0);
-
-window.remove = async (id) => {
-  await removeFromCart(id);
-  location.reload();
-};
+}

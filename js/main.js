@@ -1,7 +1,8 @@
+import { initRouter } from './utils/router.js';
 import { loadStore } from './state/store.js';
-import { router } from './utils/router.js';
 
+// 页面初始化
 document.addEventListener('DOMContentLoaded', () => {
-  loadStore();
-  router.init();
+    loadStore();
+    initRouter();
 });

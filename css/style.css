@@ -1,34 +1,80 @@
-body {
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-
-.card {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  margin-bottom: 1rem;
+body{
+    padding: 16px;
+    font-family: Arial, sans-serif;
 }
-
-input, button {
-  display: block;
-  width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.main-nav{
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid #ccc;
 }
-
-button {
-  background: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
+.main-nav a{
+    margin-right: 1rem;
+    text-decoration: none;
+    color: #0066cc;
 }
-
-button:hover {
-  background: #0056b3;
+#logout-btn{
+    padding: 4px 8px;
+}
+.card{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.dish-card{
+    border: 1px solid #ddd;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+.form-group{
+    margin: 12px 0;
+}
+input, select{
+    padding: 6px;
+    width: 320px;
+    margin-left: 8px;
+}
+label{
+    display: inline-block;
+    min-width: 140px;
+}
+.pagination a{
+    padding: 4px 10px;
+    margin: 0 4px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+}
+.pagination a.active{
+    background: #0066cc;
+    color: white;
+    border-color: #0066cc;
+}
+.error-text{
+    color: red;
+    margin: 8px 0;
+}
+button{
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 4px;
+}
+#checkout-btn{
+    margin-top: 1rem;
+}
+.loader{
+    color: #666;
+    font-size: 16px;
+    padding: 8px 0;
+}
+.text-link {
+    margin-top: 1rem;
+}
+.btn-logout {
+    background:#dc3545;
+    margin-top:1rem;
+    color: white;
 }

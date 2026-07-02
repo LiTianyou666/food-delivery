@@ -1,42 +1,45 @@
-import { getOrderDetail, confirmDelivery } from '../api/api.js';
+import { api } from '../api/api.js';
+import { renderLoader } from '../components/Loader.js';
+import { renderError } from '../components/ErrorMessage.js';
+import { escapeHtml, formatPrice, formatDateTime } from '../utils/helpers.js';
 
-export function OrderDetail() {
-  return `
-    <div class="card">
-      <h2>Order Detail</h2>
-      <div id="order-info">Loading...</div>
-      <button id="confirm-btn" style="display:none;">Confirm delivery</button>
-      <button onclick="history.back()">Back</button>
-    </div>
-  `;
+export function OrderDetail(params = {}) {
+    const orderId = params.id;
+    setTimeout(() => loadOrderDetail(orderId), 0);
+    return `
+        <div class="card">
+            <h2>Order Detail</h2>
+            <div id="order-detail">${renderLoader()}</div>
+        </div>
+    `;
 }
 
-setTimeout(async () => {
-  const infoEl = document.getElementById('order-info');
-  const confirmBtn = document.getElementById('confirm-btn');
-  if (!infoEl) return;
-
-  try {
-    const path = window.location.pathname;
-    const id = path.split('/').pop();
-    const order = await getOrderDetail(id);
-
-    infoEl.innerHTML = `
-      <p>Order #${order.id}</p>
-      <p>Status: ${order.status}</p>
-      <p>Total: ${order.price} ₽</p>
-    `;
-
-    if (order.status === 'InProcess' && confirmBtn) {
-      confirmBtn.style.display = 'block';
-      confirmBtn.onclick = async () => {
-        await confirmDelivery(id);
-        location.reload();
-      };
+async function loadOrderDetail(id) {
+    const box = document.getElementById('order-detail');
+    if (!box) return;
+    try {
+        const order = await api.getOrderDetail(id);
+        const orderTime = formatDateTime(order.orderTime);
+        const deliveryTime = formatDateTime(order.deliveryTime);
+        const itemsHtml = order.items && order.items.length > 0
+            ? order.items.map(item => `
+                <div class="dish-card">
+                    <p>${escapeHtml(item.name)} × ${item.count}</p>
+                    <p>Subtotal: ${formatPrice(item.totalPrice)}</p>
+                </div>
+              `).join('')
+            : '<p>No items in this order</p>';
+        box.innerHTML = `
+            <p><strong>Order ID:</strong> ${escapeHtml(order.id)}</p>
+            <p><strong>Status:</strong> ${escapeHtml(order.status)}</p>
+            <p><strong>Order Time:</strong> ${orderTime}</p>
+            <p><strong>Delivery Time:</strong> ${deliveryTime}</p>
+            <p><strong>Total Price:</strong> ${formatPrice(order.totalPrice)}</p>
+            <hr>
+            <h4>Ordered Items</h4>
+            ${itemsHtml}
+        `;
+    } catch (err) {
+        box.innerHTML = renderError(err.message);
     }
-  } catch (err) {
-    if (infoEl) {
-      infoEl.innerHTML = 'Failed to load order';
-    }
-  }
-}, 0);
+}

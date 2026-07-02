@@ -1,0 +1,99 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    line-height: 1.6;
+}
+
+#main-nav {
+    background: #222;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 2rem;
+}
+
+#main-nav nav {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.dish-card {
+    border: 1px solid #eee;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+}
+
+.form-group {
+    margin: 1rem 0;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 0.6rem 1.2rem;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: #6c99cc;
+    cursor: not-allowed;
+}
+
+.error-text {
+    color: #dc3545;
+    margin: 0.5rem 0;
+}
+
+.pagination {
+    margin: 1.5rem 0;
+    display: flex;
+    gap: 0.8rem;
+}
+
+.pagination a {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #222;
+}
+
+.pagination a.active {
+    background: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
