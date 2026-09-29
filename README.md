@@ -1,2 +1,3 @@
 - TASK-3.1: Restaurant list and filtering implemented.
 - TASK-3.2: Shopping cart CRUD implemented.
+- TASK-3.3: Order form and validation implemented.
