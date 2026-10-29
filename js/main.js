@@ -6,3 +6,4 @@ document.addEventListener('DOMContentLoaded', () => {
     loadStore();
     initRouter();
 });
+// TASK-3.1: Restaurant list and filtering
