@@ -97,3 +97,6 @@ button:disabled {
     color: #fff;
     border-color: #007bff;
 }
+@media (max-width: 768px) {
+    body { padding: 0.5rem; } /* 修复手机端边距 */
+}

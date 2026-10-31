@@ -4,7 +4,7 @@ const API_BASE = 'https://food-delivery.int.kreosoft.space/api';
 async function request(url, options = {}) {
     // 直接读取本地存储token，和你最初可用版本逻辑一致，不会出现store同步失效401
     const token = localStorage.getItem('token');
-    console.log('🔍 Requesting:', url, 'with Token:', token);
+    // console.log('🔍 Requesting:', url, 'with Token:', token);
 
     const headers = {
         'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ async function request(url, options = {}) {
     });
 
     if (!response.ok) {
-        // 新增状态码+状态文字，报错信息更清晰
+        // 新增状态码+状态文字，报错信息更清晰，友好的错误提示
         throw new Error(`Request failed: ${response.status} ${response.statusText}`);
     }
 
